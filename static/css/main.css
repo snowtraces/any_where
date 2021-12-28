@@ -1,0 +1,183 @@
+@import "common.css";
+#main-wrapper #data-wrapper {
+  margin: 50px auto;
+  max-width: 800px;
+  padding: 10px;
+}
+#main-wrapper #data-wrapper #data-content {
+  position: relative;
+}
+#main-wrapper #data-wrapper #data-content #data-input {
+  width: 100%;
+  height: 300px;
+  padding: 1em;
+  border: 1px solid #999;
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  line-height: 16px;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+}
+#main-wrapper #data-wrapper #data-content #data-input:focus {
+  border: 1px solid #444;
+  outline: none !important;
+}
+#main-wrapper #data-wrapper #data-content .data-code {
+  position: absolute;
+  background: #ffffff;
+  width: 100%;
+  height: 300px;
+  top: 0;
+  overflow: auto;
+  font-size: 12px;
+  border: 1px solid #999;
+}
+#main-wrapper #data-wrapper #data-content .data-code > pre {
+  height: 100%;
+}
+#main-wrapper #data-wrapper #data-content .data-option {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+}
+#main-wrapper #data-wrapper #data-content .data-option > * {
+  font-size: 13px;
+  border-left: 1px solid #ffffff;
+  padding: 3px 5px;
+  background: #ccc;
+  opacity: 0.6;
+  cursor: pointer;
+  user-select: none;
+}
+#main-wrapper #data-wrapper #data-content .data-option > *:hover {
+  opacity: 0.9;
+}
+#main-wrapper #data-wrapper #data-share {
+  height: 40px;
+  width: 100%;
+  background: #fff;
+  display: flex;
+}
+#main-wrapper #data-wrapper #data-share .share-left {
+  background: #608384;
+  color: #ffffff;
+  line-height: 40px;
+  text-align: center;
+  width: 100%;
+  cursor: pointer;
+}
+#main-wrapper #data-wrapper #data-share .share-left.success {
+  width: 100px;
+}
+#main-wrapper #data-wrapper #data-share .share-right {
+  display: none;
+  background: #bbbbbb;
+  text-align: center;
+}
+#main-wrapper #data-wrapper #data-share .share-right .share-info {
+  width: calc(100% - 80px);
+  padding: 10px;
+  display: inline-block;
+  overflow: hidden;
+}
+#main-wrapper #data-wrapper #data-share .share-right .share-info > a {
+  text-decoration: underline;
+}
+#main-wrapper #data-wrapper #data-share .share-right .share-btn {
+  width: 80px;
+  padding: 10px;
+  border-left: 1px solid #fff;
+  cursor: pointer;
+}
+#main-wrapper #data-wrapper #data-share .share-right.success {
+  display: flex;
+  width: calc(100% - 100px);
+}
+
+#nav-wrapper {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+}
+#nav-wrapper .nav-item {
+  padding: 6px;
+  width: 80px;
+  border: 1px solid;
+  margin: 0 10px;
+  text-align: center;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#aside-wrapper {
+  position: fixed;
+  right: 0;
+  top: 0;
+  box-shadow: 0 0 10px -3px #ccc;
+  height: 100vh;
+  width: 100%;
+  max-width: 500px;
+  background: #fff;
+  transition: all 0.3s;
+}
+#aside-wrapper .aside-option {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 40px;
+  line-height: 40px;
+  width: 40px;
+  text-align: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+#aside-wrapper .aside-option:hover {
+  transform: rotate(180deg);
+}
+#aside-wrapper .aside-header {
+  height: 40px;
+  line-height: 40px;
+  padding: 0 10px;
+  font-size: 16px;
+  border-bottom: 1px solid #ccc;
+}
+#aside-wrapper .aside-content {
+  height: calc(100vh - 40px);
+  overflow: auto;
+}
+#aside-wrapper .aside-content .aside-item {
+  border-bottom: 3px solid #eee;
+  padding: 14px;
+}
+#aside-wrapper .aside-content .aside-item__data {
+  width: 100%;
+  max-height: 160px;
+  overflow: auto;
+  font-size: 12px;
+  font-family: var(--ff-mono);
+  padding: 6px;
+}
+#aside-wrapper .aside-content .aside-item__option {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+#aside-wrapper .aside-content .aside-item__option > * {
+  display: inline-block;
+}
+#aside-wrapper .aside-content .aside-item__option .aside-item__delete, #aside-wrapper .aside-content .aside-item__option .aside-item__save, #aside-wrapper .aside-content .aside-item__option .aside-item__share {
+  padding: 1px 5px;
+  background: #eee;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#aside-wrapper .aside-content .aside-item__option .aside-item__delete:hover, #aside-wrapper .aside-content .aside-item__option .aside-item__save:hover, #aside-wrapper .aside-content .aside-item__option .aside-item__share:hover {
+  background: #999999;
+  color: #ffffff;
+}
+
+/*# sourceMappingURL=main.css.map */

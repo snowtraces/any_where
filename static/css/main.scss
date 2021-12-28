@@ -1,0 +1,220 @@
+@import "common.css";
+
+
+#main-wrapper {
+  #data-wrapper {
+    margin: 50px auto;
+    max-width: 800px;
+    padding: 10px;
+
+    #data-content {
+      position: relative;
+
+      #data-input {
+        width: 100%;
+        height: 300px;
+        padding: 1em;
+        border: 1px solid #999;
+        font-family: var(--ff-mono);
+        font-size: 12px;
+        line-height: 16px;
+        white-space: pre;
+        word-spacing: normal;
+        word-break: normal;
+        word-wrap: normal;
+
+        &:focus {
+          border: 1px solid #444;
+          outline: none !important;
+        }
+      }
+      
+      .data-code {
+        position: absolute;
+        background: #ffffff;
+        width: 100%;
+        height: 300px;
+        top: 0;
+        overflow: auto;
+        font-size: 12px;
+        border: 1px solid #999;
+        
+        > pre {
+          height: 100%;
+        }
+      }
+
+      .data-option {
+        position: absolute;
+        right: 16px;
+        bottom: 16px;
+        display: flex;
+
+        > * {
+          font-size: 13px;
+          border-left: 1px solid #ffffff;
+          padding: 3px 5px;
+          background: #ccc;
+          opacity: .6;
+          cursor: pointer;
+          user-select: none;
+
+          &:hover {
+            opacity: 0.9;
+          }
+        }
+      }
+    }
+
+
+    #data-share {
+      height: 40px;
+      width: 100%;
+      background: #fff;
+      display: flex;
+
+      .share-left {
+        background: #608384;
+        color: #ffffff;
+        line-height: 40px;
+        text-align: center;
+        width: 100%;
+        cursor: pointer;
+
+        &.success {
+          width: 100px;
+        }
+      }
+
+      .share-right {
+        display: none;
+        background: #bbbbbb;
+        text-align: center;
+
+        .share-info {
+          width: calc(100% - 80px);
+          padding: 10px;
+          display: inline-block;
+          overflow: hidden;
+
+          > a {
+            text-decoration: underline;
+          }
+        }
+
+        .share-btn {
+          width: 80px;
+          padding: 10px;
+          border-left: 1px solid #fff;
+          cursor: pointer;
+        }
+
+        &.success {
+          display: flex;
+          width: calc(100% - 100px);
+        }
+      }
+
+    }
+  }
+}
+
+#nav-wrapper {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+
+  .nav-item {
+    padding: 6px;
+    width: 80px;
+    border: 1px solid;
+    margin: 0 10px;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+}
+
+#aside-wrapper {
+  position: fixed;
+  right: 0;
+  top: 0;
+  box-shadow: 0 0 10px -3px #ccc;
+  height: 100vh;
+  width: 100%;
+  max-width: 500px;
+  background: #fff;
+  transition: all 0.3s;
+
+  $aside-header-height: 40px;
+
+  .aside-option {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: $aside-header-height;
+    line-height: $aside-header-height;
+    width: $aside-header-height;
+    text-align: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      transform: rotate(180deg);
+    }
+  }
+
+  .aside-header {
+    height: $aside-header-height;
+    line-height: $aside-header-height;
+    padding: 0 10px;
+    font-size: 16px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .aside-content {
+    height: calc(100vh - 40px);
+    overflow: auto;
+
+
+    .aside-item {
+      border-bottom: 3px solid #eee;
+      padding: 14px;
+
+      &__data {
+        width: 100%;
+        max-height: 160px;
+        overflow: auto;
+        font-size: 12px;
+        font-family: var(--ff-mono);
+        padding: 6px;
+      }
+
+      &__option {
+        font-size: 12px;
+        margin-bottom: 10px;
+
+        > * {
+          display: inline-block;
+        }
+
+        .aside-item__delete, .aside-item__save, .aside-item__share {
+          padding: 1px 5px;
+          background: #eee;
+          border-radius: 3px;
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:hover {
+            background: #999999;
+            color: #ffffff;
+          }
+        }
+
+      }
+    }
+  }
+
+}

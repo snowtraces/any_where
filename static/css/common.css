@@ -1,0 +1,125 @@
+html {
+    font-size: 14px;
+}
+
+body {
+    --ff-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Liberation Sans", sans-serif;
+    --ff-mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "Liberation Mono", Menlo, Monaco, Consolas, "Microsoft Yahei Mono", "Microsoft Yahei", monospace;
+}
+
+body {
+    margin: 0;
+    font-family: var(--ff-sans);
+    background: #f1f3f5;
+    overflow-y: scroll;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #e3e3e3;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 3px;
+}
+
+p {
+    line-height: 1.5rem;
+}
+
+li {
+    line-height: 1.5rem;
+}
+
+pre {
+    margin: 0;
+}
+
+.clearfix::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
+
+button,
+input {
+    border: none;
+    outline: none;
+    background: none;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+code {
+    font-family: var(--ff-mono) !important;
+}
+
+*:not(pre):not(h1):not(h2):not(h3):not(h4) > code {
+    font-family: var(--ff-mono);
+    font-size: 0.875rem;
+    padding: 3px 4px;
+    background: #eee;
+    border-radius: 3px;
+}
+
+h1 {
+    font-size: 1.5rem;
+}
+
+h2 {
+    font-size: 1.35rem;
+}
+
+h3 {
+    font-size: 1.2rem;
+}
+
+h4, h5, h6 {
+    font-size: 1rem;
+}
+
+img {
+    max-width: 100%;
+}
+
+em[lang=zh] {
+    margin: 0 2px;
+    font-family: "SimSun", "STSong", "KaiTi", "STKaiti", serif;
+    font-style: normal;
+}
+
+hr {
+    border: 0;
+    color: #bbbbbb;
+    background-color: #bbbbbb;
+    height: 1px;
+    margin-bottom: 20px;
+}
+
+[class*="-btn"] {
+    user-select: none;
+}
