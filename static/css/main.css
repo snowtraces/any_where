@@ -19,6 +19,7 @@
   word-spacing: normal;
   word-break: normal;
   word-wrap: normal;
+  tab-size: 4;
 }
 #main-wrapper #data-wrapper #data-content #data-input:focus {
   border: 1px solid #444;

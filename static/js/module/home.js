@@ -82,7 +82,6 @@
 
             $.bindEvent("#data-input", "blur", (e, from) => {
                 let codeType = this.checkCodeType($.el('#data-input').value)
-                $.log(codeType)
                 if (codeType) {
                     $.el('.data-code').innerHTML = `<pre class="language-${codeType}"><code class="language-${codeType}">${this.html2Escape($.el('#data-input').value)}</code></pre>`
                     Prism.highlightAll()
@@ -164,8 +163,6 @@
             })
 
             let codeTypes = ["js", "sql", "go", "markup"]
-
-            $.log(codeCount)
 
             let maxCount = Math.max(...Object.values(codeCount))
             let types = codeTypes.filter(type => codeCount[type] && codeCount[type] === maxCount)
