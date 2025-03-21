@@ -56,5 +56,4 @@ func main() {
 	log.Println("Starting HTTP service at " + svr.Addr)
 
 	log.Fatal(svr.ListenAndServe())
-
 }

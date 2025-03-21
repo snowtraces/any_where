@@ -1,20 +1,30 @@
 @import "common.css";
 
+body {
+  padding: 20px;
+}
 
 #main-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+  text-align: center;
+
   #data-wrapper {
-    margin: 50px auto;
-    max-width: 800px;
     padding: 10px;
 
     #data-content {
       position: relative;
+      margin-bottom: 1em;
 
       #data-input {
         width: 100%;
-        height: 300px;
+        height: 360px;
         padding: 1em;
-        border: 1px solid #999;
         font-family: var(--ff-mono);
         font-size: 12px;
         line-height: 16px;
@@ -24,22 +34,32 @@
         word-wrap: normal;
         tab-size: 4;
 
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        resize: vertical;
+        transition: 0.3s;
+
         &:focus {
-          border: 1px solid #444;
-          outline: none !important;
+          outline: none;
+          border-color: #007bff;
+          box-shadow: 0 0 12px rgba(0, 123, 255, 0.3);
         }
       }
-      
+
       .data-code {
         position: absolute;
         background: #ffffff;
         width: 100%;
-        height: 300px;
+        height: 360px;
         top: 0;
         overflow: auto;
         font-size: 12px;
-        border: 1px solid #999;
-        
+
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        resize: vertical;
+        transition: 0.3s;
+
         > pre {
           height: 100%;
         }
@@ -53,12 +73,14 @@
 
         > * {
           font-size: 13px;
-          border-left: 1px solid #ffffff;
           padding: 3px 5px;
           background: #ccc;
           opacity: .6;
           cursor: pointer;
           user-select: none;
+          border-radius: 2px;
+          box-shadow: 1px 1px 2px #666;
+
 
           &:hover {
             opacity: 0.9;
@@ -82,8 +104,11 @@
         width: 100%;
         cursor: pointer;
 
+        border-radius: 6px;
+
         &.success {
           width: 100px;
+          border-radius: 6px 0 0 6px;
         }
       }
 
@@ -91,12 +116,15 @@
         display: none;
         background: #bbbbbb;
         text-align: center;
+        border-radius: 0 6px 6px 0;
 
         .share-info {
           width: calc(100% - 80px);
           padding: 10px;
           display: inline-block;
-          overflow: hidden;
+          background: #ffffff;
+          border: 1px solid #bbb;
+          margin: 0 -1px;
 
           > a {
             text-decoration: underline;
@@ -121,18 +149,28 @@
 }
 
 #nav-wrapper {
-  margin: auto;
+  margin: 20px auto;
   display: flex;
   justify-content: center;
 
   .nav-item {
     padding: 6px;
     width: 80px;
-    border: 1px solid;
     margin: 0 10px;
     text-align: center;
     border-radius: 3px;
     cursor: pointer;
+    background: #ffffff;
+    box-shadow: 1px 1px 3px #999;
+    transition: all 0.2s;
+    opacity: 0.4;
+    z-index: 999;
+
+    &:hover {
+      background: #608384;
+      color: #ffffff;
+      opacity: 1;
+    }
   }
 
 }
@@ -218,4 +256,26 @@
     }
   }
 
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 0;
+    overflow: auto;
+  }
+
+  #main-wrapper {
+    padding: 10px;
+
+    #data-input {
+      height: calc(100vh - 180px) !important;
+    }
+    .data-code {
+      height: calc(100vh - 180px) !important;
+    }
+  }
+
+  #aside-wrapper {
+    width: 100% !important;
+  }
 }
