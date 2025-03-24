@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
+	"log"
 	"net/http"
 )
 
@@ -33,13 +33,11 @@ func NewRouter() *mux.Router {
 // 记录请求日志信息中间件
 func loggingRequestInfo(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// 打印请求 URL 明细
-		//url, _ := json.Marshal(r.URL)
-		//log.Println(string(url))
+		log.Println(r.URL)
 
-		fmt.Printf("Request URL: %s\n", r.URL)
-		fmt.Printf("User Agent: %s\n", r.Header.Get("User-Agent"))
-		fmt.Printf("Request Header: %v\n", r.Header)
+		//fmt.Printf("Request URL: %s\n", r.URL)
+		//fmt.Printf("User Agent: %s\n", r.Header.Get("User-Agent"))
+		//fmt.Printf("Request Header: %v\n", r.Header)
 		next.ServeHTTP(w, r)
 	})
 }

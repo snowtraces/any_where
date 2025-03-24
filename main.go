@@ -9,7 +9,10 @@ import (
 	"time"
 
 	. "snowtraces.com/any_where/routes"
+	. "snowtraces.com/any_where/utils"
 )
+
+var manager *FileManager
 
 type spaHandler struct {
 	staticPath string
@@ -40,6 +43,7 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	handlers.InitFileIdx()
+	defer Manager.ReleaseAll()
 
 	router := NewRouter()
 

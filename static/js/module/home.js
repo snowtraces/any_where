@@ -28,8 +28,9 @@
 
         // 1. 执行提交
         $.request('/api/v1/msg/save', {
+          // base64
           "content": $.el('#data-input').value,
-          "createAt": ""
+          "createAt": null
         }).then(result => {
           // 2. 切换状态
           $.toggle('.submit-btn')
