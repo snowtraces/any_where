@@ -112,6 +112,9 @@
 
     },
     html2Escape(sHtml) {
+      if (!sHtml) {
+        return sHtml
+      }
       return sHtml.replace(/[<>&"]/g, function (c) {
         return {'<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;'}[c];
       });

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 	"snowtraces.com/any_where/utils"
 	"strconv"
@@ -10,7 +11,7 @@ import (
 var fileIdxMap = make(map[string]string)
 var LastFileIdx = []int64{0, -1}
 
-func WriteToFile(id string, data []byte) {
+func WriteToFile(id string, data []byte) error {
 	// 1. 块文件
 	fileIdx := LastFileIdx[0]
 	cursor := LastFileIdx[1]
@@ -27,7 +28,7 @@ func WriteToFile(id string, data []byte) {
 	err := utils.Manager.WriteAt(blockName, data, cursor+1)
 	if err != nil {
 		fmt.Println("写入失败:", err)
-		return
+		return err
 	}
 
 	// 2. 索引文件
@@ -35,11 +36,17 @@ func WriteToFile(id string, data []byte) {
 	updateIdx(id, fileIdx, cursor+1, cursorEnd)
 	LastFileIdx[0] = fileIdx
 	LastFileIdx[1] = cursorEnd - 1
+
+	return nil
 }
 
-func ReadFromFile(id string) []byte {
+func ReadFromFile(id string) ([]byte, error) {
 	// 1. 索引读取
 	fileIdxString := fileIdxMap[id]
+	if fileIdxString == "" {
+		return nil, errors.New("文件不存在")
+	}
+
 	fileMeta := strings.Split(fileIdxString, ":")
 	fileIdx, _ := strconv.ParseInt(fileMeta[0], 10, 32)
 	start, _ := strconv.ParseInt(fileMeta[1], 10, 32)
@@ -49,10 +56,9 @@ func ReadFromFile(id string) []byte {
 	blockName := "block_" + strconv.FormatInt(fileIdx, 10)
 	bytes, err := utils.Manager.ReadAt(blockName, start, int(end-start))
 	if err != nil {
-		fmt.Println("读取文件失败:", err)
-		return nil
+		return nil, errors.New("读取文件失败")
 	}
-	return bytes
+	return bytes, nil
 }
 
 func InitFileIdx() {
@@ -68,6 +74,7 @@ func InitFileIdx() {
 		if splitIdx != -1 {
 			fileIdxMap[line[:splitIdx]] = line[splitIdx+1:]
 			if i == len(idxLines)-2 {
+				LastFileIdx[0], _ = strconv.ParseInt(strings.Split(line, ":")[1], 10, 32)
 				fileEndIdx, _ := strconv.ParseInt(line[strings.LastIndex(line, ":")+1:], 10, 32)
 				LastFileIdx[1] = fileEndIdx - 1
 			}

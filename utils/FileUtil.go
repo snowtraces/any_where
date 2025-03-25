@@ -102,7 +102,7 @@ func (fm *FileManager) WriteAt(path string, data []byte, offset int64) error {
 	handler.mutex.Lock()
 	defer handler.mutex.Unlock()
 
-	if offset == -1 {
+	if offset != -1 {
 		handler.file.Seek(offset, 0)
 	}
 
