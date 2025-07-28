@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"math/rand"
 	"net/http"
 	"time"
@@ -27,11 +28,16 @@ func SaveMsg(w http.ResponseWriter, r *http.Request) {
 	// 读取请求
 	contentLength := r.ContentLength
 	body := make([]byte, contentLength)
-	r.Body.Read(body)
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		Fail(w, r, "读取请求失败: "+err.Error())
+		return
+	}
+	defer r.Body.Close()
 
 	// 对读取的 JSON 数据进行解析
 	msg := Msg{}
-	err := json.Unmarshal(body, &msg)
+	err = json.Unmarshal(body, &msg)
 	if err != nil {
 		Fail(w, r, "解析失败"+err.Error())
 		return
