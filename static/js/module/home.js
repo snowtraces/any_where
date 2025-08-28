@@ -83,6 +83,17 @@
         $.copy($.el('#data-input').value)
       })
 
+      $.bindEvent('.qr-btn', 'click', () => {
+        const text = $.el('.share-info').value;
+        if (!text) {
+          $.errorMsg("无链接内容");
+          return;
+        }
+
+        // 创建模态框
+        this.showQRCodeModal(`"${text}"`);
+      });
+
       // $.bindEvent(".data-option__edit", "click", (e, from) => {
       //     $.toggle('.data-code')
       // })
@@ -171,14 +182,17 @@
       if (cLikeCount && cLikeCount > inString.length / 240) {
         return "clike"
       }
+      if (inString.startsWith("{") || inString.startsWith("[")) {
+        return "json"
+      }
 
 
       let codeRegex = {
         "markup": "<(div|a |link |xml|node|html|body)[^\>]*>",
         "css": "(padding|margin|border|font|size)",
         "js": "(await |let |var |const |undefined|document\\.|window\\.|\\) =>)|\\$\\{",
-        "go": "(chan |defer |range|iota |nil|:=)|, err =",
-        "sql": "(select |distinct |join |left |where |exist )"
+        "go": "(chan |defer |range |iota |nil|:=)|, err =",
+        "sql": "(select |distinct |join |left |where |exist )",
       }
 
       let codeCount = {}
@@ -201,6 +215,87 @@
         return null
       }
     },
+    showQRCodeModal(text) {
+      // 创建模态框
+      const modal = document.createElement('div');
+      modal.id = 'qrcode-modal';
+      modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  `;
+
+      const content = document.createElement('div');
+      content.style.cssText = `
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    position: relative;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+  `;
+
+      const title = document.createElement('h3');
+      title.textContent = '二维码分享';
+      title.style.marginTop = '0';
+
+      // 创建 canvas 元素而不是直接使用 div
+      const canvas = document.createElement('canvas');
+      canvas.id = 'qrcode-canvas';
+      canvas.style.cssText=`
+          margin: 15px 0px;
+          border: 1px solid #333;
+      `;
+
+      const closeBtn = document.createElement('button');
+      closeBtn.innerHTML = '关闭';
+      closeBtn.style.cssText = `
+    padding: 8px 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  `;
+
+      closeBtn.addEventListener('click', () => {
+        document.body.removeChild(modal);
+      });
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          document.body.removeChild(modal);
+        }
+      });
+
+      content.appendChild(title);
+      content.appendChild(canvas);  // 添加 canvas 而不是 div
+      content.appendChild(closeBtn);
+      modal.appendChild(content);
+      document.body.appendChild(modal);
+
+      // 生成二维码到 canvas
+      QRCode.toCanvas(canvas, text, {
+        width: 200,
+        height: 200,
+        margin: 2
+      }, function (error) {
+        if (error) {
+          $.errorMsg("生成二维码失败");
+          console.error(error);
+        }
+      });
+    }
+    ,
 
     onload() {
     },

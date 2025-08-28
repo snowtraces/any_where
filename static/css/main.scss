@@ -8,7 +8,7 @@ body {
   max-width: 900px;
   margin: 0 auto;
   background: #fff;
-  padding: 40px;
+  padding: 20px;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   transition: 0.3s;
@@ -23,7 +23,7 @@ body {
 
       #data-input {
         width: 100%;
-        height: 360px;
+        height: 400px;
         padding: 1em;
         font-family: var(--ff-mono);
         font-size: 12px;
@@ -50,7 +50,7 @@ body {
         position: absolute;
         background: #ffffff;
         width: 100%;
-        height: 360px;
+        height: 400px;
         top: 0;
         overflow: auto;
         font-size: 12px;
@@ -119,7 +119,7 @@ body {
         border-radius: 0 6px 6px 0;
 
         .share-info {
-          width: calc(100% - 80px);
+          width: calc(100% - 160px);
           padding: 10px;
           display: inline-block;
           background: #ffffff;
@@ -132,6 +132,13 @@ body {
         }
 
         .share-btn {
+          width: 80px;
+          padding: 10px;
+          border-left: 1px solid #fff;
+          cursor: pointer;
+        }
+
+        .qr-btn {
           width: 80px;
           padding: 10px;
           border-left: 1px solid #fff;

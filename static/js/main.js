@@ -2,6 +2,7 @@ let jsList = [
     '/static/js/util/function.js',
     '/static/js/util/event-hub.js',
     '/static/js/3rdparty/prism.js',
+    '/static/js/3rdparty/qrcode.min.js',
 
     '/static/js/module/home.js',
 
