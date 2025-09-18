@@ -58,7 +58,9 @@
       })
 
       $.bindEvent('.share-btn', 'click', () => {
-        $.copy($.el('.share-info').value)
+        $.copy($.el('.share-info').value).then(a => {
+          $.successMsg("链接已复制")
+        })
       })
 
       $.bindEvent('.aside-option', 'click', () => {
@@ -79,8 +81,32 @@
         this.loadHistory()
       })
 
+      $.bindEvent(".aside-item__share", 'click', (e, from) => {
+        let idx = from.parentNode.dataset.idx
+        let anywhereData = JSON.parse(localStorage.getItem("anywhere") || "[]")
+        let shareUrl = `${location.protocol + "//" + location.host}/share/${anywhereData[idx].id}`
+
+        $.copy(shareUrl).then(a => {
+          $.successMsg("链接已复制")
+        })
+      })
+
       $.bindEvent(".data-option__copy", "click", (e, from) => {
-        $.copy($.el('#data-input').value)
+        $.copy($.el('#data-input').value).then(a => {
+          $.successMsg("内容已复制")
+        })
+      })
+
+      $.bindEvent(".data-option__format", "click", (e, from) => {
+        try {
+          let jsonString = JSON.stringify(JSON.parse($.el('#data-input').value), null, 2)
+          let codeType = this.checkCodeType(jsonString)
+          $.el('#data-input').value = jsonString
+          $.el('.data-code').innerHTML = `<pre class="language-${codeType}"><code class="language-${codeType}">${this.html2Escape(jsonString)}</code></pre>`
+          Prism.highlightAll()
+        } catch (e) {
+          $.log(e)
+        }
       })
 
       $.bindEvent('.qr-btn', 'click', () => {
@@ -163,7 +189,7 @@
                          <div class="aside-item__time">${$.dateFormat("YY.mm.dd HH:MM:SS", new Date(item.createAt * 1000))}</div>
 <!--                         <div class="aside-item__btn aside-item__save ">保存</div>-->
                          <div class="aside-item__btn aside-item__delete">删除</div>
-<!--                         <div class="aside-item__btn aside-item__share">分享</div>-->
+                         <div class="aside-item__btn aside-item__share">分享</div>
                        </div>
                        <pre class="aside-item__data">${this.html2Escape(item.content)}</pre>
                     </div>
@@ -174,46 +200,106 @@
     },
     checkCodeType(inString) {
       if (!inString) {
-        return null
+        return null;
       }
 
-      let cLikeRegex = "(if\\s*\\(|else\\s*\\(|while|do|for\\s*\\(|return | in |instanceof|function|new|try|throw|catch|finally|null|break|continue)"
-      let cLikeCount = (inString.match(new RegExp(cLikeRegex, "ig")) || []).length
-      if (cLikeCount && cLikeCount > inString.length / 240) {
-        return "clike"
-      }
-      if (inString.startsWith("{") || inString.startsWith("[")) {
-        return "json"
-      }
-
-
-      let codeRegex = {
-        "markup": "<(div|a |link |xml|node|html|body)[^\>]*>",
-        "css": "(padding|margin|border|font|size)",
-        "js": "(await |let |var |const |undefined|document\\.|window\\.|\\) =>)|\\$\\{",
-        "go": "(chan |defer |range |iota |nil|:=)|, err =",
-        "sql": "(select |distinct |join |left |where |exist )",
-      }
-
-      let codeCount = {}
-      Object.keys(codeRegex).map(key => {
-        let reg = new RegExp(codeRegex[key], "ig")
-        let matchResult = inString.match(reg)
-        if (matchResult && matchResult.length > 0) {
-          codeCount[key] = matchResult.length
-          $.log(key, matchResult)
+      // 先检查是否为 JSON 格式（高确定性）
+      if ((inString.trim().startsWith("{") && inString.trim().endsWith("}")) ||
+        (inString.trim().startsWith("[") && inString.trim().endsWith("]"))) {
+        try {
+          JSON.parse(inString.trim());
+          return "json";
+        } catch (e) {
+          // 如果解析失败，继续其他判断
         }
-      })
-
-      let codeTypes = ["js", "sql", "go", "markup", "css"]
-
-      let maxCount = Math.max(...Object.values(codeCount))
-      let types = codeTypes.filter(type => codeCount[type] && codeCount[type] === maxCount)
-      if (types && types.length > 0) {
-        return types[0]
-      } else {
-        return null
       }
+
+      // 定义各语言的特征词和权重
+      const languagePatterns = {
+        "js": {
+          patterns: [
+            /\b(?:await|let|var|const|function|=>|console\.|document\.|window\.|import|export|class\s+\w+)\b/,
+            /\$?\{[^}]*\}/,
+            /(?:let|const|var)\s+\w+\s*=/,
+            /\.\w+\(/
+          ],
+          weight: 1.0
+        },
+        "css": {
+          patterns: [
+            /[\w-]+\s*:\s*[^;]+;/,
+            /(?:\.|#)[\w-]+\s*\{/,
+            /@media|@keyframes|@import/,
+            /background|color|margin|padding|border|font/
+          ],
+          weight: 0.9
+        },
+        "markup": {
+          patterns: [
+            /<\/?[a-zA-Z][\s\S]*?>/,
+            /<!DOCTYPE html>/i,
+            /<\??xml/i
+          ],
+          weight: 0.8
+        },
+        "sql": {
+          patterns: [
+            /\b(?:SELECT|INSERT|UPDATE|DELETE|FROM|WHERE|JOIN|ORDER BY|GROUP BY)\b/i,
+            /\b(?:select|insert|update|delete|from|where|join|order by|group by)\b/
+          ],
+          weight: 0.9
+        },
+        "go": {
+          patterns: [
+            /\b(?:package|import|func|chan|defer|range|go\s+\w+)\b/,
+            /(?:var|const)\s+\w+\s+[\w\*]+/,
+            /\w+\s*:=\s*.+/,
+            /,\s*err\s*:=/
+          ],
+          weight: 1.0
+        },
+        "clike": {
+          patterns: [
+            /\b(?:if\s*\(|else\s*\{|while\s*\(|for\s*\(|return|break|continue|switch|case)\b/,
+            /#include\s*[<"]/,
+            /\b(?:int|char|void|float|double|struct|class)\s+\w+/,
+            /std::\w+/,
+            /public\s+class/
+          ],
+          weight: 0.7
+        }
+      };
+
+      // 计算各语言的匹配分数
+      const scores = {};
+
+      Object.keys(languagePatterns).forEach(lang => {
+        const {patterns, weight} = languagePatterns[lang];
+        let score = 0;
+
+        patterns.forEach(pattern => {
+          const matches = inString.match(new RegExp(pattern, 'g'));
+          if (matches) {
+            score += matches.length;
+          }
+        });
+
+        // 应用权重并考虑代码长度
+        scores[lang] = score * weight / Math.max(1, inString.length / 100);
+      });
+
+      // 找出得分最高的语言
+      let bestLanguage = null;
+      let maxScore = 0;
+
+      Object.keys(scores).forEach(lang => {
+        if (scores[lang] > maxScore && scores[lang] > 0.1) { // 设置最小阈值
+          maxScore = scores[lang];
+          bestLanguage = lang;
+        }
+      });
+
+      return bestLanguage;
     },
     showQRCodeModal(text) {
       // 创建模态框
@@ -246,12 +332,12 @@
 
       const title = document.createElement('h3');
       title.textContent = '二维码分享';
-      title.style.marginTop = '0';
+      title.style.margin = '0';
 
       // 创建 canvas 元素而不是直接使用 div
       const canvas = document.createElement('canvas');
       canvas.id = 'qrcode-canvas';
-      canvas.style.cssText=`
+      canvas.style.cssText = `
           margin: 15px 0px;
           border: 1px solid #333;
       `;
